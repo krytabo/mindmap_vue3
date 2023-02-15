@@ -1,58 +1,69 @@
 import panzoom from "panzoom";
+// import panzoom from "vue-panzoom";
+// import { patchLineList } from "@/views/config/api.js";
 import { GenNonDuplicateID } from "@/common/until";
 
 const methods = {
-  init() {
+  /*init() {
     this.jsPlumb.ready(() => {
-      // 导入默认配置
+      // 導入默認配置
       this.jsPlumb.importDefaults(this.jsplumbSetting);
-      //完成连线前的校验
-      this.jsPlumb.bind("beforeDrop", () => {
-        let res = () => {}; //此处可以添加是否创建连接的校验， 返回 false 则不添加；
+      //完成連線前的檢查
+      this.jsPlumb.bind("beforeDrop", (evt) => {
+        console.log(evt, 123);
+        let res = () => {}; //此處可以加入是否加入添加連線的檢查， 返回 false 則不增加；
         return res;
       });
-      // 连线创建成功后，维护本地数据
+      // 新增連線成功後，維護本地數據
       this.jsPlumb.bind("connection", (evt) => {
         this.addLine(evt);
       });
-      //连线双击删除事件
-      this.jsPlumb.bind("dblclick", (conn) => {
+      //連線點擊兩下刪除
+      this.jsPlumb.bind("dblclick", (conn, originalEvent) => {
+        console.log(originalEvent);
         this.confirmDelLine(conn);
       });
-      //断开连线后，维护本地数据
+      //斷開連線後，維護本地數據
       this.jsPlumb.bind("connectionDetached", (evt) => {
         this.deleLine(evt);
       });
       this.loadEasyFlow();
-      // 会使整个jsPlumb立即重绘。
+      // 讓jsPlumb立刻重整。
       this.jsPlumb.setSuspendDrawing(false, true);
     });
     this.initPanZoom();
   },
-  // 加载流程图
+  // 載入流程圖
   loadEasyFlow() {
-    // 初始化节点
+    console.log(this.data.nodeList, 11111);
+    // 節點初始化
     for (let i = 0; i < this.data.nodeList.length; i++) {
       let node = this.data.nodeList[i];
+      console.log(node, 2222);
       // 设置源点，可以拖出线连接其他节点
       this.jsPlumb.makeSource(node.id, this.jsplumbSourceOptions);
+      console.log(node.id);
       // // 设置目标点，其他源点拖出的线可以连接该节点
       this.jsPlumb.makeTarget(node.id, this.jsplumbTargetOptions);
       // this.jsPlumb.draggable(node.id);
       this.draggableNode(node.id);
     }
 
-    // 初始化连线
-    this.jsPlumb.unbind("connection"); //取消连接事件
+    // 連線初始化
+    this.jsPlumb.unbind("connection"); //取消連線事件
     for (let i = 0; i < this.data.lineList.length; i++) {
       let line = this.data.lineList[i];
-      this.jsPlumb.connect(
+      const conn = this.jsPlumb.connect(
         {
           source: line.from,
           target: line.to,
         },
         this.jsplumbConnectOptions
       );
+      conn.setLabel({
+        label: line.label,
+        cssClass: `linkLabel ${line.id}`,
+      });
     }
     this.jsPlumb.bind("connection", (evt) => {
       let from = evt.source.id;
@@ -60,12 +71,21 @@ const methods = {
       this.data.lineList.push({
         from: from,
         to: to,
-        label: "连线名称",
+        label: "連線名稱",
         id: GenNonDuplicateID(8),
         Remark: "",
       });
+
+      const data = {
+        from: evt.source.id,
+        to: evt.target.id,
+        label: "連線名稱",
+        id: GenNonDuplicateID(8),
+        Remark: "",
+      };
+      patchLineList(data);
     });
-  },
+  },*/
   draggableNode(nodeId) {
     this.jsPlumb.draggable(nodeId, {
       grid: this.commonGrid,
@@ -80,26 +100,26 @@ const methods = {
       },
     });
   },
-  //移动节点时，动态显示对齐线
-  alignForLine(nodeId, position) {
+  //移動節點時，動態顯示對齊線
+  /*alignForLine(nodeId, position) {
     let showXLine = false,
       showYLine = false;
     this.data.nodeList.some((el) => {
-      if (el.id !== nodeId && el.left == position[0] + "px") {
+      if (el.id !== nodeId && el.left === position[0] + "px") {
         this.auxiliaryLinePos.x = position[0] + 60;
         showYLine = true;
       }
-      if (el.id !== nodeId && el.top == position[1] + "px") {
+      if (el.id !== nodeId && el.top === position[1] + "px") {
         this.auxiliaryLinePos.y = position[1] + 20;
         showXLine = true;
       }
     });
     this.auxiliaryLine.isShowYLine = showYLine;
     this.auxiliaryLine.isShowXLine = showXLine;
-  },
+  },*/
   changeNodePosition(nodeId, pos) {
     this.data.nodeList.some((v) => {
-      if (nodeId == v.id) {
+      if (nodeId === v.id) {
         v.left = pos[0] + "px";
         v.top = pos[1] + "px";
         return true;
@@ -107,6 +127,78 @@ const methods = {
         return false;
       }
     });
+  },
+
+  /*addLine(line) {
+    /!*let from = line.source.id;
+    let to = line.target.id;
+    this.data.lineList.push({
+      from: from,
+      to: to,
+      label: "連線名稱",
+      id: GenNonDuplicateID(8),
+      Remark: "",
+    });*!/
+
+    const data = {
+      from: line.source.id,
+      to: line.target.id,
+      label: "連線名稱",
+      id: GenNonDuplicateID(8),
+      Remark: "",
+    };
+    patchLineList(data);
+  },*/
+
+  getScale() {
+    let scale1;
+    if (this.jsPlumb.pan) {
+      const { scale } = this.jsPlumb.pan.getTransform();
+      scale1 = scale;
+    } else {
+      const matrix = window.getComputedStyle(this.jsPlumb.getContainer()).transform;
+      scale1 = matrix.split(", ")[3] * 1;
+    }
+    this.jsPlumb.setZoom(scale1);
+    return scale1;
+  },
+
+  /** 編輯時呼叫的function */
+  // 刪除連線
+  confirmDelLine(line) {
+    this.$Modal.confirm({
+      title: "刪除連線",
+      content: "<p>是否確認刪除該連線？</p>",
+      onOk: () => {
+        this.jsPlumb.deleteConnection(line);
+      },
+    });
+  },
+  deleLine(line) {
+    this.data.lineList.forEach((item, index) => {
+      if (item.from === line.sourceId && item.to === line.targetId) {
+        this.data.lineList.splice(index, 1);
+      }
+    });
+  },
+
+  //刪除節點
+  deleteNode(node) {
+    this.data.nodeList.some((v, index) => {
+      if (v.id === node.id) {
+        this.data.nodeList.splice(index, 1);
+        this.jsPlumb.remove(v.id);
+        return true;
+      } else {
+        return false;
+      }
+    });
+  },
+
+  /** 拖動增加新的節點 */
+  // dragover默認不觸發drag
+  allowDrop(event) {
+    event.preventDefault();
   },
   drag(ele, item) {
     this.currentItem = item;
@@ -125,52 +217,6 @@ const methods = {
     };
     this.addNode(temp);
   },
-  addLine(line) {
-    let from = line.source.id;
-    let to = line.target.id;
-    this.data.lineList.push({
-      from: from,
-      to: to,
-      label: "连线名称",
-      id: GenNonDuplicateID(8),
-      Remark: "",
-    });
-  },
-  confirmDelLine(line) {
-    this.$Modal.confirm({
-      title: "删除连线",
-      content: "<p>确认删除该连线？</p>",
-      onOk: () => {
-        this.jsPlumb.deleteConnection(line);
-      },
-    });
-  },
-  deleLine(line) {
-    this.data.lineList.forEach((item, index) => {
-      if (item.from === line.sourceId && item.to === line.targetId) {
-        this.data.lineList.splice(index, 1);
-      }
-    });
-  },
-  // dragover默认事件就是不触发drag事件，取消默认事件后，才会触发drag事件
-  allowDrop(event) {
-    event.preventDefault();
-  },
-  getScale() {
-    let scale1;
-    if (this.jsPlumb.pan) {
-      const { scale } = this.jsPlumb.pan.getTransform();
-      scale1 = scale;
-    } else {
-      const matrix = window.getComputedStyle(
-        this.jsPlumb.getContainer()
-      ).transform;
-      scale1 = matrix.split(", ")[3] * 1;
-    }
-    this.jsPlumb.setZoom(scale1);
-    return scale1;
-  },
-  // 添加新的节点
   addNode(temp) {
     this.data.nodeList.push(temp);
     this.$nextTick(() => {
@@ -180,6 +226,7 @@ const methods = {
     });
   },
 
+  /** 縮放 */
   initPanZoom() {
     const mainContainer = this.jsPlumb.getContainer();
     const mainContainerWrap = mainContainer.parentNode;
@@ -190,12 +237,12 @@ const methods = {
       zoomDoubleClickSpeed: 1,
       minZoom: 0.5,
       maxZoom: 2,
-      //设置滚动缩放的组合键，默认不需要组合键
-      beforeWheel: (e) => {
-        console.log(e);
+      //設置縮放的組合鍵，默認不需要
+      /*beforeWheel: (e) => {
+        console.log("滾輪狀態", e);
         // let shouldIgnore = !e.ctrlKey
         // return shouldIgnore
-      },
+      },*/
       beforeMouseDown: function (e) {
         // allow mouse-down panning only if altKey is down. Otherwise - ignore
         var shouldIgnore = e.ctrlKey;
@@ -204,11 +251,11 @@ const methods = {
     });
     this.jsPlumb.mainContainerWrap = mainContainerWrap;
     this.jsPlumb.pan = pan;
-    // 缩放时设置jsPlumb的缩放比率
+    // 縮放時設定jsPlumb的縮放比例
     pan.on("zoom", (e) => {
       const { x, y, scale } = e.getTransform();
       this.jsPlumb.setZoom(scale);
-      //根据缩放比例，缩放对齐辅助线长度和位置
+      //依照縮放比例，對齊輔助線的長度跟位置
       this.auxiliaryLinePos.width = (1 / scale) * 100 + "%";
       this.auxiliaryLinePos.height = (1 / scale) * 100 + "%";
       this.auxiliaryLinePos.offsetX = -(x / scale);
@@ -222,7 +269,7 @@ const methods = {
       this.auxiliaryLinePos.offsetY = -(y / scale);
     });
 
-    // 平移时设置鼠标样式
+    // 移動時設定滑鼠的樣式
     mainContainerWrap.style.cursor = "grab";
     mainContainerWrap.addEventListener("mousedown", function wrapMousedown() {
       this.style.cursor = "grabbing";
@@ -235,7 +282,7 @@ const methods = {
     });
   },
 
-  setNodeName(nodeId, name) {
+  /*setNodeName(nodeId, name) {
     this.data.nodeList.some((v) => {
       if (v.id === nodeId) {
         v.nodeName = name;
@@ -244,24 +291,11 @@ const methods = {
         return false;
       }
     });
-  },
+  },*/
 
-  //删除节点
-  deleteNode(node) {
-    this.data.nodeList.some((v, index) => {
-      if (v.id === node.id) {
-        this.data.nodeList.splice(index, 1);
-        this.jsPlumb.remove(v.id);
-        return true;
-      } else {
-        return false;
-      }
-    });
-  },
-
-  //更改连线状态
+  //點擊時連線的樣式改變
   changeLineState(nodeId, val) {
-    console.log(val);
+    // console.log("變更連線狀態", val);
     let lines = this.jsPlumb.getAllConnections();
     lines.forEach((line) => {
       if (line.targetId === nodeId || line.sourceId === nodeId) {
@@ -274,7 +308,7 @@ const methods = {
     });
   },
 
-  //初始化节点位置  （以便对齐,居中）
+  //初始化節點位置，方便對齊，置中
   fixNodesPosition() {
     if (this.data.nodeList && this.$refs.flowWrap) {
       const nodeWidth = 120;
@@ -305,14 +339,8 @@ const methods = {
       nodePoint.top = minTop;
       nodePoint.bottom = wrapInfo.height - maxTop - nodeHeight;
 
-      fixTop =
-        nodePoint.top !== nodePoint.bottom
-          ? (nodePoint.bottom - nodePoint.top) / 2
-          : 0;
-      fixLeft =
-        nodePoint.left !== nodePoint.right
-          ? (nodePoint.right - nodePoint.left) / 2
-          : 0;
+      fixTop = nodePoint.top !== nodePoint.bottom ? (nodePoint.bottom - nodePoint.top) / 2 : 0;
+      fixLeft = nodePoint.left !== nodePoint.right ? (nodePoint.right - nodePoint.left) / 2 : 0;
 
       this.data.nodeList.map((el) => {
         let top = Number(el.top.substring(0, el.top.length - 2)) + fixTop;

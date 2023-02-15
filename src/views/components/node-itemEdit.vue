@@ -10,10 +10,22 @@
     @mouseleave="hideAnchor"
     @contextmenu.prevent="onContextmenu"
   >
+    <!--<div class="log-wrap">
+      <img :src="node.logImg" alt="" />
+    </div>-->
     <div class="flex flex-col space-y-4">
       <p>{{ node.nodeName }}</p>
       <img v-show="node.img" :src="node.img" alt="" />
     </div>
+    <!--連線用--//觸發連線的區域-->
+    <div class="node-anchor anchor-top" v-show="mouseEnter"></div>
+    <div class="node-anchor anchor-right" v-show="mouseEnter"></div>
+    <div class="node-anchor anchor-bottom" v-show="mouseEnter"></div>
+    <div class="node-anchor anchor-left" v-show="mouseEnter"></div>
+
+    <!--<el-drawer title="我是标题" v-model="drawer">
+      {{ newNodeName }}
+    </el-drawer>-->
   </div>
 </template>
 
@@ -51,13 +63,15 @@ export default {
     hideAnchor() {
       this.mouseEnter = false;
     },
-    onContextmenu() {
+    onContextmenu(e) {
       this.$contextmenu({
+        x: e.x,
+        y: e.y,
         items: [
           {
             label: "删除",
+            icon: "ri-delete-bin-fill",
             disabled: false,
-            icon: "",
             onClick: () => {
               this.deleteNode();
             },
@@ -89,6 +103,32 @@ export default {
       }
       this.$emit("changeLineState", this.node.id, false);
       this.isActive = false;
+    },
+    editNode() {
+      this.newNodeName = this.node.nodeName;
+      this.drawer = true;
+      /*this.$Modal.confirm({
+        render: (h) => {
+          return h("Input", {
+            props: {
+              value: this.newNodeName,
+              autofocus: true,
+            },
+            on: {
+              input: (val) => {
+                this.newNodeName = val;
+              },
+            },
+          });
+        },
+        onOk: () => {
+          console.log(this.newNodeName);
+          this.$emit("setNodeName", this.node.id, this.newNodeName);
+        },
+      });*/
+      /* this.$alert(this.newNodeName, "HTML 片段", {
+        dangerouslyUseHTMLString: true,
+      });*/
     },
     deleteNode() {
       this.$emit("deleteNode", this.node);

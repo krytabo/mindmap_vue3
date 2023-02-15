@@ -3,21 +3,47 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+import "./assets/tailwind.css";
+import "remixicon/fonts/remixicon.css";
+
+//axios
+import axios from "axios";
+import VueAxios from "vue-axios";
+
+//vue-panzoom
+import panZoom from "vue-panzoom";
+
+//click-outside-vue3
+import vClickOutside from "click-outside-vue3";
+
+//iView
+import ViewUIPlus from "view-ui-plus";
+import "view-ui-plus/dist/styles/viewuiplus.css";
+
+//vue3-context-menu
+import "@imengyu/vue3-context-menu/lib/vue3-context-menu.css";
+import ContextMenu from "@imengyu/vue3-context-menu";
+
+// import ContextMenu from "vue3-contextmenu";
+import "vue3-contextmenu/dist/vue3-contextmenu.css";
+
+// Element-plus
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import locale from "element-plus/es/locale/lang/zh-tw";
 
-import Vue3DraggableResizable from "vue3-draggable-resizable";
-//default styles
-import "vue3-draggable-resizable/dist/Vue3DraggableResizable.css";
+import jsPlumb from "jsplumb";
 
-import ClickOutside from "click-outside-vue3"; //點擊範圍外
-import panZoom from "vue-panzoom"; //滑鼠滾輪放大縮小
-
-createApp(App)
-  .use(store)
-  .use(router)
-  .use(ElementPlus)
-  .use(Vue3DraggableResizable)
-  .use(ClickOutside)
-  .use(panZoom)
-  .mount("#app");
+const app = createApp(App);
+app.use(store);
+app.use(router);
+app.use(VueAxios, axios);
+app.provide("$axios", axios);
+app.use(panZoom);
+app.use(vClickOutside);
+app.use(ViewUIPlus);
+app.use(ContextMenu);
+app.use(ElementPlus, { locale: locale });
+app.provide("$jsPlumb", jsPlumb);
+// app.use(contextmenu);
+app.mount("#app");

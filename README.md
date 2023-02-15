@@ -22,5 +22,3 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-# mindmap_vue3
-# mindmap_vue3

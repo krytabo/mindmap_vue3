@@ -53,15 +53,6 @@
       "top": "180px",
       "left": "1160px",
       "img": ""
-    },
-    {
-      "type": "end",
-      "typeName": "設備名稱6",
-      "nodeName": "設備名稱6",
-      "id": "1ogr3wzy6zhc01",
-      "top": "480px",
-      "left": "470px",
-      "img": ""
     }
   ],
   "lineList": [
@@ -98,13 +89,6 @@
       "to": "34v56ha2l9c000",
       "label": "連線名稱",
       "id": "494f5sbsn9c000",
-      "Remark": ""
-    },
-    {
-      "from": "34v56ha2l9c000",
-      "to": "1ogr3wzy6zhc01",
-      "label": "連線名稱",
-      "id": "494f5sbsn9c002",
       "Remark": ""
     }
   ]

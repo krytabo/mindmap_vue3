@@ -1,215 +1,173 @@
 <template>
-  <div class="flow_region">
-    <div class="nodes-wrap">
-      <div
-        v-for="item in nodeTypeList"
-        :key="item.type"
-        class="node"
-        draggable="true"
-        @dragstart="drag($event, item)"
-      >
-        <div class="log">
-          <img :src="item.logImg" alt="" />
-        </div>
-        <div class="name">{{ item.typeName }}</div>
-      </div>
-    </div>
-    <div
-      id="flowWrap"
-      ref="flowWrap"
-      class="flow-wrap"
-      @drop="drop($event)"
-      @dragover="allowDrop($event)"
-    >
-      <div id="flow">
-        <div
-          v-show="auxiliaryLine.isShowXLine"
-          class="auxiliary-line-x"
-          :style="{
-            width: auxiliaryLinePos.width,
-            top: auxiliaryLinePos.y + 'px',
-            left: auxiliaryLinePos.offsetX + 'px',
-          }"
-        ></div>
-        <div
-          v-show="auxiliaryLine.isShowYLine"
-          class="auxiliary-line-y"
-          :style="{
-            height: auxiliaryLinePos.height,
-            left: auxiliaryLinePos.x + 'px',
-            top: auxiliaryLinePos.offsetY + 'px',
-          }"
-        ></div>
-        <flowNode
-          v-for="item in data.nodeList"
-          :id="item.id"
-          :key="item.id"
-          :node="item"
-          @setNodeName="setNodeName"
-          @deleteNode="deleteNode"
-          @changeLineState="changeLineState"
-        ></flowNode>
-      </div>
-    </div>
-  </div>
+  <router-link to="/addPage">
+    <el-button>新增</el-button>
+  </router-link>
+
+  <el-table :data="tableData">
+    <el-table-column label="公司名稱" prop="com_name"></el-table-column>
+    <el-table-column label="設定狀態" prop="status" width="100">
+      <template #default="scope">
+        <el-tag v-if="scope.row.status === 1" effect="dark">已設定</el-tag>
+        <el-tag v-else effect="dark" type="danger">未設定</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" width="100">
+      <template #default="scope">
+        <el-button type="text" @click="edit_list(scope.$index, scope.row)">查看</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
-import { jsPlumb } from "jsplumb";
-import { nodeTypeList } from "./config/init";
-import {
-  jsplumbSetting,
-  jsplumbConnectOptions,
-  jsplumbSourceOptions,
-  jsplumbTargetOptions,
-} from "./config/commonConfig";
-import methods from "./config/methods";
-import data from "./config/data.json";
-import flowNode from "./components/node-item";
+import { mindMapList } from "./config/api.js";
 export default {
-  name: "FlowEdit",
-  components: {
-    flowNode,
-  },
+  name: "homeView",
   data() {
     return {
-      jsPlumb: null,
-      currentItem: null,
-      nodeTypeList: nodeTypeList,
-      nodeTypeObj: {},
-      data: {
-        nodeList: [],
-        lineList: [],
-      },
-      selectedList: [],
-      jsplumbSetting: jsplumbSetting,
-      jsplumbConnectOptions: jsplumbConnectOptions,
-      jsplumbSourceOptions: jsplumbSourceOptions,
-      jsplumbTargetOptions: jsplumbTargetOptions,
-      auxiliaryLine: { isShowXLine: false, isShowYLine: false }, //对齐辅助线是否显示
-      auxiliaryLinePos: {
-        width: "100%",
-        height: "100%",
-        offsetX: 0,
-        offsetY: 0,
-        x: 20,
-        y: 20,
-      },
-      commonGrid: [5, 5], //节点移动最小距离
-      selectModuleFlag: false, //多选标识
-      rectAngle: {
-        px: "", //多选框绘制时的起始点横坐标
-        py: "", //多选框绘制时的起始点纵坐标
-        left: 0,
-        top: 0,
-        height: 0,
-        width: 0,
-      },
+      /*tableData: [
+        {
+          comID: 0,
+          comName: "展示社區",
+          status: 1, //0=未設定 1=已設定
+          mindMap: {
+            nodeList: [
+              {
+                type: "start",
+                typeName: "ZLAN",
+                nodeName: "ZLAN",
+                id: "34v56ha2l9c000",
+                top: "260px",
+                left: "240px",
+                img: "https://m.360buyimg.com/mobilecms/s750x750_jfs/t1/124103/22/1983/161768/5ec22fe8E4235ffa7/3cf67e3a26838940.jpg!q80.dpg",
+              },
+              {
+                type: "dataSet",
+                typeName: "CCTV-01",
+                nodeName: "CCTV-01",
+                id: "5sdjugrcqhc000",
+                top: "0px",
+                left: "470px",
+                img: "https://www.sourcesecurity.com/img/products/400/illustra-ipl02b2bnwiy-cctv-camera.jpg",
+              },
+              {
+                type: "encode",
+                typeName: "緊急壓釦",
+                nodeName: "緊急壓釦",
+                id: "3atqi5p6oa4000",
+                top: "0px",
+                left: "0px",
+                img: "https://manuals.fibaro.com/wp-content/uploads/2019/05/download.png",
+              },
+              {
+                type: "personService",
+                typeName: "設備名稱3",
+                nodeName: "設備名稱3",
+                id: "49vcu89p5q0000",
+                top: "245px",
+                left: "600px",
+                img: "",
+              },
+              {
+                type: "arrange",
+                typeName: "設備名稱4",
+                nodeName: "設備名稱4",
+                id: "1jhiilb0t2tc00",
+                top: "180px",
+                left: "880px",
+                img: "",
+              },
+              {
+                type: "end",
+                typeName: "設備名稱5",
+                nodeName: "設備名稱5",
+                id: "1ogr3wzy6zhc00",
+                top: "180px",
+                left: "1160px",
+                img: "",
+              },
+              {
+                type: "end",
+                typeName: "設備名稱6",
+                nodeName: "設備名稱6",
+                id: "1ogr3wzy6zhc01",
+                top: "480px",
+                left: "470px",
+                img: "",
+              },
+            ],
+            lineList: [
+              {
+                form: "34v56ha2l9c000",
+                to: "5sdjugrcqhc000",
+                label: "",
+                id: "5n6pp5xqd6s000",
+                Remark: "",
+              },
+              {
+                form: "5sdjugrcqhc000",
+                to: "49vcu89p5q0000",
+                label: "連線名稱",
+                id: "zoisvo5gpvk00",
+                Remark: "",
+              },
+              {
+                form: "49vcu89p5q0000",
+                to: "1jhiilb0t2tc00",
+                label: "連線名稱",
+                id: "ldc917l47w000",
+                Remark: "",
+              },
+              {
+                form: "1jhiilb0t2tc00",
+                to: "1ogr3wzy6zhc00",
+                label: "連線名稱",
+                id: "478galw3u34000",
+                Remark: "",
+              },
+              {
+                form: "3atqi5p6oa4000",
+                to: "34v56ha2l9c000",
+                label: "連線名稱",
+                id: "494f5sbsn9c000",
+                Remark: "",
+              },
+              {
+                form: "34v56ha2l9c000",
+                to: "1ogr3wzy6zhc01",
+                label: "連線名稱連線名稱連線名稱連線名稱連線名稱",
+                id: "494f5sbsn9c002",
+                Remark: "",
+              },
+            ],
+          },
+        },
+        {
+          comID: 0,
+          comName: "展示社區2",
+          status: 0, //0=未設定 1=已設定
+          mindMap: {},
+        },
+      ],*/
+      tableData: [],
     };
   },
-  mounted() {
-    this.jsPlumb = jsPlumb.getInstance();
-    this.initNodeTypeObj();
-    this.initNode();
-    this.fixNodesPosition();
-    this.$nextTick(() => {
-      this.init();
-    });
-  },
   methods: {
-    ...methods,
-    initNodeTypeObj() {
-      nodeTypeList.map((v) => {
-        this.nodeTypeObj[v.type] = v;
+    getApi() {
+      mindMapList().then((res) => {
+        this.tableData = res.data;
       });
     },
-    initNode() {
-      this.data.lineList = data.lineList;
-      data.nodeList.map((v) => {
-        v.logImg = this.nodeTypeObj[v.type].logImg;
-        v.log_bg_color = this.nodeTypeObj[v.type].log_bg_color;
-        this.data.nodeList.push(v);
-      });
+
+    edit_list(index, result) {
+      let data = JSON.stringify(result);
+      this.$router.push({ path: "/viewPage", query: { res: data, editStatus: false } });
     },
+  },
+  mounted() {
+    this.getApi();
   },
 };
 </script>
-<style lang="scss">
-.flow_region {
-  display: flex;
-  width: 90%;
-  height: 90%;
-  margin: 20px auto;
-  border: 1px solid #ccc;
-  .nodes-wrap {
-    width: 150px;
-    height: 100%;
-    border-right: 1px solid #ccc;
-    .node {
-      display: flex;
-      height: 40px;
-      width: 80%;
-      margin: 5px auto;
-      border: 1px solid #ccc;
-      line-height: 40px;
-      &:hover {
-        cursor: grab;
-      }
-      &:active {
-        cursor: grabbing;
-      }
-      .log {
-        width: 40px;
-        height: 40px;
-      }
-      .name {
-        width: 0;
-        flex-grow: 1;
-      }
-    }
-  }
-  .flow-wrap {
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    outline: none !important;
-    flex-grow: 1;
-    background-image: url("../assets/point.png");
-    #flow {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      .auxiliary-line-x {
-        position: absolute;
-        border: 0.5px dashed #2ab1e8;
-        z-index: 9999;
-      }
-      .auxiliary-line-y {
-        position: absolute;
-        border: 0.5px dashed #2ab1e8;
-        z-index: 9999;
-      }
-    }
-  }
-}
-.jtk-connector.active {
-  z-index: 9999;
-  path {
-    stroke: #150042;
-    stroke-width: 1.5;
-    animation: ring;
-    animation-duration: 3s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    stroke-dasharray: 5;
-  }
-}
-@keyframes ring {
-  from {
-    stroke-dashoffset: 50;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-</style>
+
+<style scoped></style>

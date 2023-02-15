@@ -1,18 +1,15 @@
 export const jsplumbSetting = {
   grid: [10, 10],
-  // 动态锚点、位置自适应
+  // 錨點、位置自適應
   Anchors: ["TopCenter", "RightMiddle", "BottomCenter", "LeftMiddle"],
   Container: "flow",
-  // 连线的样式 StateMachine、Flowchart,有四种默认类型：Bezier（贝塞尔曲线），Straight（直线），Flowchart（流程图），State machine（状态机）
-  Connector: [
-    "Flowchart",
-    { cornerRadius: 5, alwaysRespectStubs: true, stub: 5 },
-  ],
-  // 鼠标不能拖动删除线
+  // 連線的樣式 StateMachine、Flowchart,有四種默認類型：Bezier（曲線），Straight（直線），Flowchart（流程圖），State machine（狀態機）
+  Connector: ["Flowchart", { cornerRadius: 5, alwaysRespectStubs: true, stub: 5 }],
+  // 滑鼠不能拖動刪除線
   ConnectionsDetachable: false,
-  // 删除线的时候节点不删除
+  // 刪除連接線的時候，節點不刪除
   DeleteEndpointsOnDetach: false,
-  // 连线的端点
+  // 連線的端點
   // Endpoint: ["Dot", {radius: 5}],
   Endpoint: [
     "Rectangle",
@@ -21,19 +18,19 @@ export const jsplumbSetting = {
       width: 10,
     },
   ],
-  // 线端点的样式
+  // 端點的樣式
   EndpointStyle: {
     fill: "rgba(255,255,255,0)",
     outlineWidth: 1,
   },
-  LogEnabled: false, //是否打开jsPlumb的内部日志记录
-  // 绘制线
+  LogEnabled: false, //是否打開jsPlumb的內部日誌
+  // 連接線的樣式
   PaintStyle: {
     stroke: "#409eff",
     strokeWidth: 2,
   },
   HoverPaintStyle: { stroke: "#ff00cc", strokeWidth: 2 },
-  // 绘制箭头
+  // 箭頭樣式
   Overlays: [
     [
       "Arrow",
@@ -47,17 +44,17 @@ export const jsplumbSetting = {
   RenderMode: "svg",
 };
 
-// jsplumb连接参数
+// jsplumb連接參數
 export const jsplumbConnectOptions = {
   isSource: true,
   isTarget: true,
-  // 动态锚点、提供了4个方向 Continuous、AutoDefault
+  // 動態錨點、提供4個方向 Continuous、AutoDefault
   anchor: ["TopCenter", "RightMiddle", "BottomCenter", "LeftMiddle"],
 };
 
 export const jsplumbSourceOptions = {
-  filter: ".node-anchor", //触发连线的区域
-  /*"span"表示标签，".className"表示类，"#id"表示元素id*/
+  filter: ".node-anchor", //觸發連線的區域
+  /*"span"表示標籤，".className"表示種類，"#id"表示元素id*/
   filterExclude: false,
   anchor: ["TopCenter", "RightMiddle", "BottomCenter", "LeftMiddle"],
   allowLoopback: false,
@@ -65,7 +62,7 @@ export const jsplumbSourceOptions = {
 
 export const jsplumbTargetOptions = {
   filter: ".node-anchor",
-  /*"span"表示标签，".className"表示类，"#id"表示元素id*/
+  /*"span"表示標籤，".className"表示種類，"#id"表示元素id*/
   filterExclude: false,
   anchor: ["TopCenter", "RightMiddle", "BottomCenter", "LeftMiddle"],
   allowLoopback: false,

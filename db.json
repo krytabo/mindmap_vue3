@@ -1,0 +1,132 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "com_name": "展示社區",
+      "status": 1,
+      "nodeList": [
+        {
+          "type": "start",
+          "typeName": "ZLAN",
+          "nodeName": "ZLAN",
+          "id": "34v56ha2l9c000",
+          "top": "260px",
+          "left": "240px",
+          "img": "https://m.360buyimg.com/mobilecms/s750x750_jfs/t1/124103/22/1983/161768/5ec22fe8E4235ffa7/3cf67e3a26838940.jpg!q80.dpg"
+        },
+        {
+          "type": "dataSet",
+          "typeName": "CCTV-01",
+          "nodeName": "CCTV-01",
+          "id": "5sdjugrcqhc000",
+          "top": "0px",
+          "left": "470px",
+          "img": "https://www.sourcesecurity.com/img/products/400/illustra-ipl02b2bnwiy-cctv-camera.jpg"
+        },
+        {
+          "type": "encode",
+          "typeName": "緊急壓釦",
+          "nodeName": "緊急壓釦",
+          "id": "3atqi5p6oa4000",
+          "top": "0px",
+          "left": "0px",
+          "img": "https://manuals.fibaro.com/wp-content/uploads/2019/05/download.png"
+        },
+        {
+          "type": "personService",
+          "typeName": "設備名稱3",
+          "nodeName": "設備名稱3",
+          "id": "49vcu89p5q0000",
+          "top": "245px",
+          "left": "600px",
+          "img": ""
+        },
+        {
+          "type": "arrange",
+          "typeName": "設備名稱4",
+          "nodeName": "設備名稱4",
+          "id": "1jhiilb0t2tc00",
+          "top": "180px",
+          "left": "880px",
+          "img": ""
+        },
+        {
+          "type": "end",
+          "typeName": "設備名稱5",
+          "nodeName": "設備名稱5",
+          "id": "1ogr3wzy6zhc00",
+          "top": "180px",
+          "left": "1160px",
+          "img": ""
+        },
+        {
+          "type": "end",
+          "typeName": "設備名稱6",
+          "nodeName": "設備名稱6",
+          "id": "1ogr3wzy6zhc01",
+          "top": "480px",
+          "left": "470px",
+          "img": ""
+        }
+      ],
+      "lineList": [
+        {
+          "from": "34v56ha2l9c000",
+          "to": "5sdjugrcqhc000",
+          "label": "",
+          "id": "5n6pp5xqd6s000",
+          "Remark": ""
+        },
+        {
+          "from": "5sdjugrcqhc000",
+          "to": "49vcu89p5q0000",
+          "label": "連線名稱",
+          "id": "zoisvo5gpvk00",
+          "Remark": ""
+        },
+        {
+          "from": "49vcu89p5q0000",
+          "to": "1jhiilb0t2tc00",
+          "label": "連線名稱",
+          "id": "ldc917l47w000",
+          "Remark": ""
+        },
+        {
+          "from": "1jhiilb0t2tc00",
+          "to": "1ogr3wzy6zhc00",
+          "label": "連線名稱",
+          "id": "478galw3u34000",
+          "Remark": ""
+        },
+        {
+          "from": "3atqi5p6oa4000",
+          "to": "34v56ha2l9c000",
+          "label": "連線名稱",
+          "id": "494f5sbsn9c000",
+          "Remark": ""
+        },
+        {
+          "from": "34v56ha2l9c000",
+          "to": "1ogr3wzy6zhc01",
+          "label": "連線名稱連線名稱連線名稱連線名稱連線名稱",
+          "id": "494f5sbsn9c002",
+          "Remark": ""
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "com_name": "展示社區1",
+      "status": 0,
+      "nodeList": [],
+      "lineList": []
+    },
+    {
+      "id": 2,
+      "com_name": "展示社區2",
+      "status": 0,
+      "nodeList": [],
+      "lineList": []
+    }
+  ]
+}

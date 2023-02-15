@@ -1,12 +1,19 @@
 const nodeTypeList = [
   {
-    type: "start",
-    typeName: "開始",
-    nodeName: "開始",
-    logImg: require("@/assets/svg/1开始.svg"),
+    type: "cctv",
+    typeName: "攝影機",
+    nodeName: "攝影機",
+    // logImg: require("@/assets/svg/cctv.svg"),
     log_bg_color: "rgba(0, 128, 0, 0.2)",
   },
   {
+    type: "equipment",
+    typeName: "設備",
+    nodeName: "設備",
+    // logImg: require("@/assets/svg/cctv.svg"),
+    log_bg_color: "rgba(0, 128, 0, 0.2)",
+  },
+  /*{
     type: "end",
     typeName: "結束",
     nodeName: "結束",
@@ -29,18 +36,18 @@ const nodeTypeList = [
   },
   {
     type: "personService",
-    typeName: "個人服務",
-    nodeName: "個人服務",
+    typeName: "個人",
+    nodeName: "個人",
     logImg: require("@/assets/svg/8个人服务.svg"),
     log_bg_color: "rgba(132, 166, 251, 0.2)",
   },
   {
     type: "arrange",
-    typeName: "清洗",
-    nodeName: "清洗",
+    typeName: "整理",
+    nodeName: "整理",
     logImg: require("@/assets/svg/15清洗.svg"),
     log_bg_color: "rgba(250, 205, 81, 0.2)",
-  },
+  },*/
 ];
 
 // console.log(nodeTypeList);
